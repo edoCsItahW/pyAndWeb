@@ -13,7 +13,7 @@
 # 编码模式: utf-8
 # 注释: 
 # -------------------------<Lenovo>----------------------------
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from api.view import api_blue
 
 app = Flask(__name__, static_folder=r".\static", template_folder=r".\template")
@@ -25,10 +25,15 @@ def root():
 
 
 @app.route("/politics/")
-def polititcs():
+def politics():
     return render_template(r"politics.html")
 
 
+@app.route("/politics/exam", methods=["POST", "GET"])
+def politicsExam():
+    return render_template(r"exam.html")
+
+
 if __name__ == '__main__':
-    app.register_blueprint(api_blue)
+    app.register_blueprint(api_blue, url_prefix="/politics/api")
     app.run(host="0.0.0.0", debug=True)

@@ -13,12 +13,13 @@
 # 编码模式: utf-8
 # 注释: 
 # -------------------------<Lenovo>----------------------------
-from flask import Blueprint, request, jsonify
-from sqlTools import baseSQL
+from flask import Blueprint, request, jsonify, render_template, url_for, redirect
+from support import jsonSql  # type: ignore
 
-api_blue = Blueprint("api", __name__, url_prefix="/politics/api")
+api_blue = Blueprint("api", __name__, template_folder=r"..\template")
 
 keyDict = {"sChoice": "单选题", "multChoice": "多选题", "anQuestion": "辨析题"}
+sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
 
 
 @api_blue.route("/siftInit", methods=["POST"])
@@ -27,15 +28,26 @@ def siftInit():
     索要所有
     """
     print(request.json)
-    port1 = {}
+    port1 = {
+        "key":  {k: v for v, k in
+                 sql.selectColumn("lookup", ("name", "chName"), show=False)},
+        "data": {
+            "type":    {
+                "option": sql.selectColumn("lookup", ("chName",), condition="where type = 'option'", show=False),
+                "mutex":  sql.selectColumn("lookup", ("chName",), condition="where type = 'mutex'", show=False)[0],
+            },
+            "chapter": sql.selectColumn("lookup", ("chName",), condition="where type = 'chapter'", show=False),
+            "other":   sql.selectColumn("lookup", ("chName",), condition="where type = 'other'", show=False)
+        }
+    }
     return jsonify({"code": 200, "msg": "ok", "data": {"1": port1}})
 
 
 @api_blue.route("/qListInit", methods=["POST"])
 def qListInit():
-    print(request.json)
+    print(req := request.json)
     port2 = {
-        "key": {"sChoice": "单选题", "multChoice": "多选题", "anQuestion": "辨析题"},
+        "key":      keyDict,
         "question": {
             "sChoice":    [
                 {
@@ -90,24 +102,25 @@ def qListInit():
 
 @api_blue.route("/qListRef", methods=["POST"])
 def qListRef():
-    print(request.json)
-    return jsonify({"code": 200, "msg": "ok"})
+    print(req := request.json)
+    prot3 = {
+        "key": keyDict,
+        "question": sql.toApiFormat(sql.getValueFromKey(sql.transfromDict(req)))
+    }
+    return jsonify({"code": 200, "msg": "ok", "data": {"3": prot3}})
 
 
 @api_blue.route("/exam", methods=["POST"])
 def exam():
-    print(request.json)
-    return jsonify({"code": 200, "msg": "ok"})
+    print(req := request.json)
+    return redirect(url_for("politicsExam"))
 
 
 if __name__ == '__main__':
-    sql = baseSQL("root", "135246qq", "quesinfo", tableName="politics")
-    sql.showTableContent()
     # sql.showTableFrame()
     # sql.insert()
     # sql.column_add(None, "optionA", "varchar(128)", After="content", notNull=True)
     # sql.column_default(None, "optionA", "")
     # sql.column_modify(None, "optionA", "varchar(128)", NoNULL=False)
     # sql.insert(content="示例题目1", optionA="A选项", optionB="B选项", optionC="C选项", optionD="D选项", answer="B", type="sChoice", chapter="chapter1", other="other")
-    # sql.insert(content="示例题目2", optionA="A选项", optionB="B选项", optionC="C选项", optionD="D选项", answer="[B, D]", type="multChoice", chapter="chapter2", other="other")
-    # sql.insert(content="示例题目3", answer="这是大题", type="anQuestion", chapter="chapter3", other="other")
+    pass

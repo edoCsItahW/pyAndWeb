@@ -15,7 +15,8 @@ const port1 = {
         "第一章": "chapter1",
         "第二章": "chapter2",
         "其它": "other"
-    }, data: {
+    },
+    data: {
         type: {
             option: ["单选", "多选", "大题"],
             mutex: "套卷",  // 与option互斥

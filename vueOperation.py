@@ -8,21 +8,21 @@
 #  permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 # -------------------------<Lenovo>----------------------------
-# 传建时间: 2024/3/8 20:30
-# 当前项目名: test_architectures.py
+# 传建时间: 2024/3/28 18:26
+# 当前项目名: pyAndWeb
 # 编码模式: utf-8
 # 注释: 
 # -------------------------<Lenovo>----------------------------
-from flask import Flask, render_template
-
-app = Flask(__name__, static_folder=r".\static", template_folder=r".\template")
+from os import PathLike, path
 
 
-@app.route("/", methods=["GET", "POST"])
-def root():
-    return render_template(r"UI.html")
+class vue:
+    def __init__(self, rootDir: PathLike[str] | str):
+        self._rootDir = rootDir
+
+        if not path.isabs(self._rootDir):
+            raise RuntimeError() from FileNotFoundError()
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
-
+    ins = vue(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\vueDev\exam")

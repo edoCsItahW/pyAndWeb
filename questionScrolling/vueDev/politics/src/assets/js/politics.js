@@ -275,7 +275,7 @@ onload = () => {
 
     const siftFrom = BF.byId("siftfrom")
 
-    siftFrom.addEventListener('change', funcSet.debounce(() => {funcSet.request(apiUrl, "qListRef", 3, funcSet.serialize(siftFrom, "name")).then(res => {initialize.refreshQes(res.data[3], BF.byClass("qsdiv"))})}, 1000))
+    siftFrom.addEventListener('change', funcSet.debounce(() => {funcSet.request(apiUrl, "qListRef", 1, funcSet.serialize(siftFrom, "name")).then(res => {initialize.refreshQes(res.data[3], BF.byClass("qsdiv"))})}, 1000))
 }
 
 export default {

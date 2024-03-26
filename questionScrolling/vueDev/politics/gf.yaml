@@ -3,7 +3,7 @@ info:
   title: 示例
   description: __无__
   version: 1.0.0
-#servers:
+# servers:
 #  - url: 'https'
 paths:
   /api/{sbj}:
