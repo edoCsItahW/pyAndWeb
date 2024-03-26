@@ -1,0 +1,56 @@
+<!--
+  Copyright (c) 2024. All rights reserved.
+  This source code is licensed under the CC BY-NC-ND
+  (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+  This software is protected by copyright law. Reproduction, distribution, or use for commercial
+  purposes is prohibited without the author's permission. If you have any questions or require
+  permission, please contact the author: 2207150234@st.sziit.edu.cn
+  -->
+
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>文件共享系统</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/图标-文件夹1.jpg') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- 浏览器不支持cjs即(CommonJS)要用umb-browser的 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" integrity="sha512-0lgU8lnl7ZSEslUFXl5pAlpy5tuBozsaiALNv7/i8thJ8JUcwcMbHKpVFeL43K2zIvDYk1cHxOMPGm61OZZBHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.esm-browser.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.162.0/three.module.min.js"></script>-->
+
+</head>
+<body>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <div>
+        <label for="fetch">信息: </label><input type="text" id="fetch"><button id="fetchSender">fetch发送</button><br>
+        <label for="socket">信息: </label><input type="text" id="socket"><button id="socketSender">socket发送</button><br>
+        <label for="xhr">信息: </label><input type="text" id="xhr"><button id="xhrSender">xhr发送</button>
+    </div>
+
+    <script type="module">
+        import { fetch_send, socket_send, xhr_send } from "../static/js/script.js";
+
+        document.getElementById("fetchSender").addEventListener('click', () => fetch_send(document.getElementById('fetch').value))
+        document.getElementById("socketSender").addEventListener('click', () => socket_send(document.getElementById('socket').value))
+        document.getElementById("xhrSender").addEventListener('click', () => xhr_send(document.getElementById('xhr').value))
+
+    </script>
+
+    <!-- <form action="/api/file" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".jgp, .png" required>
+            <input type="submit" value="提交文件">
+         </form> -->
+
+    <input type="file" id="fileInput">
+    <button id="uploadBtn">上传文件</button>
+    <div id="result"></div>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!--
+  Copyright (c) 2024. All rights reserved.
+  This source code is licensed under the CC BY-NC-ND
+  (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+  This software is protected by copyright law. Reproduction, distribution, or use for commercial
+  purposes is prohibited without the author's permission. If you have any questions or require
+  permission, please contact the author: 2207150234@st.sziit.edu.cn
+  -->
+
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+
+
+    <link rel="apple-touch-icon" type="image/png" href="{{ url_for('static', filename='imgs/ticon.webp') }}"/>
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/icon.ico') }}"/>
+
+    <link rel="mask-icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/mask.svg') }}" color="#111"/>
+
+    <script src="{{ url_for('static', filename='js/stopExecutionOnTimeout.js') }}"></script>
+
+
+    <title>Menja</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2c3f51">
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script>
+        window.console = window.console || function (t) {
+        };
+    </script>
+
+
+</head>
+
+<body translate="no">
+	<!-- Game canvas -->
+	<canvas id="c"></canvas>
+
+	<!-- Gameplay HUD -->
+	<div class="hud">
+		<div class="hud__score">
+			<div class="score-lbl"></div>
+			<div class="cube-count-lbl"></div>
+		</div>
+		<div class="pause-btn">
+			<div></div>
+		</div>
+		<div class="slowmo">
+			<div class="slowmo__bar"></div>
+		</div>
+	</div>
+
+	<!-- Menu System -->
+	<div class="menus">
+		<div class="menu menu--main">
+			<h1>MENJA</h1>
+			<button type="button" class="play-normal-btn">开始</button>
+			<button type="button" class="play-casual-btn">休闲模式</button>
+			<div class="credits">一个来自<a href="https://cmiller.tech">作者</a>的8kb游戏</div>
+		</div>
+		<div class="menu menu--pause">
+			<h1>暂停</h1>
+			<button type="button" class="resume-btn">继续游戏</button>
+			<button type="button" class="menu-btn--pause">主菜单</button>
+		</div>
+		<div class="menu menu--score">
+			<h1>游戏失败</h1>
+			<h2>你的得分:</h2>
+			<div class="final-score-lbl"></div>
+			<div class="high-score-lbl"></div>
+			<button type="button" class="play-again-btn">重新开始</button>
+			<button type="button" class="menu-btn--score">主菜单</button>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+
+</html>

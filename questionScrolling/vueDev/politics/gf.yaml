@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: 示例
+  description: __无__
+  version: 1.0.0
+#servers:
+#  - url: 'https'
+paths:
+  /api/{sbj}:
+    post:
+      summary: 获取科目(sbj)的题目列表
+      parameters:
+        - in: query
+          name: sbj
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sbj'
+components:
+  schemas:
+    sbj:
+      type: string
+      properties:
+        content:
+          type: string
+          description: 科目名称
+
+

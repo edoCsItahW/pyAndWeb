@@ -1,0 +1,66 @@
+/*
+ Copyright (c) 2024. All rights reserved.
+ This source code is licensed under the CC BY-NC-ND
+ (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+ This software is protected by copyright law. Reproduction, distribution, or use for commercial
+ purposes is prohibited without the author's permission. If you have any questions or require
+ permission, please contact the author: 2207150234@st.sziit.edu.cn
+ */
+
+.main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 假设你想让容器占据整个视口的高度 */
+}
+
+.toolbar {
+    border: 2px solid #000000;
+    border-radius: 5px;
+    height: 50px; /* 或其他你希望的高度 */
+    background-image: linear-gradient(to right, rgb(53, 65, 58) 6%, rgb(54, 72, 58) 15%, rgb(53, 65, 58) 12%, rgb(60, 63, 64) 66%);
+}
+
+.optionblock {
+    display: flex;
+    flex: 1; /* 剩余空间 */
+}
+
+.fileblock {
+    background-color: rgb(38, 41, 45);
+    border: 2px solid #000000;
+    border-radius: 5px;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.editblock {
+    border: 2px solid #000000;
+    border-radius: 5px;
+    flex-grow: 5; /* 两个底部div平分剩余空间 */
+    flex-basis: 0;
+}
+
+#typeblock {
+    width: 100%;
+    height: 100%;
+    border: none;
+    resize: none;
+    background-color: rgb(28, 30, 35);
+    color: rgb(188, 190, 196);
+    font-family: "JetBrains Mono", serif;
+}
+
+#prompt {
+    position: absolute;
+    border: 2px solid rgb(66, 68, 73);
+    color: rgb(188, 190, 196);
+    border-radius: 5px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;  /* 设置为垂直方向 */
+    align-items: stretch; /* 默认情况下也是stretch，但如果需要可以显式设置 */
+    gap: 0;  /* 控制弹性项之间的间距，如果支持gap属性的话 */
+    margin: 0;  /* 确保容器本身没有外边距 */
+    padding: 0;  /* 确保容器本身没有内边距 */
+    font-family: "JetBrains Mono", serif;
+}

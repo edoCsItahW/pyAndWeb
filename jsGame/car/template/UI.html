@@ -1,0 +1,95 @@
+<!--
+  Copyright (c) 2024. All rights reserved.
+  This source code is licensed under the CC BY-NC-ND
+  (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+  This software is protected by copyright law. Reproduction, distribution, or use for commercial
+  purposes is prohibited without the author's permission. If you have any questions or require
+  permission, please contact the author: 2207150234@st.sziit.edu.cn
+  -->
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+
+
+    <link rel="apple-touch-icon" type="image/png" href="{{ url_for('static', filename='imgs/ticon.webp') }}"/>
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/icon.ico') }}"/>
+
+    <link rel="mask-icon" type="image/x-icon" href="{{ url_for('static', filename='imgs/mask.svg') }}" color="#111"/>
+
+    <script src="{{ url_for('static', filename='js/stopExecutionOnTimeout.js') }}"></script>
+
+
+    <title>交通游戏</title>
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script>
+        window.console = window.console || function (t) {};
+    </script>
+
+
+</head>
+
+<body translate="no">
+<div id="score">点击向上箭头</div>
+
+<div id="controls">
+    <div id="buttons">
+        <button id="accelerate">
+            <svg width="30" height="30" viewBox="0 0 10 10">
+                <g transform="rotate(0, 5,5)">
+                    <path d="M5,4 L7,6 L3,6 L5,4"/>
+                </g>
+            </svg>
+        </button>
+        <button id="decelerate">
+            <svg width="30" height="30" viewBox="0 0 10 10">
+                <g transform="rotate(180, 5,5)">
+                    <path d="M5,4 L7,6 L3,6 L5,4"/>
+                </g>
+            </svg>
+        </button>
+    </div>
+    <div id="instructions">
+        点击向上键开始.使用向上和向下键加速或减速,并且避免与其他车辆碰撞.
+    </div>
+</div>
+
+<div id="results">
+    <div class="content">
+        <h1>车祸!</h1>
+        <p>R键重新开始</p>
+
+        <a id="result-youtube" target="_top" href="https://youtu.be/JhgBwJn1bQw">
+            <div class="youtube"></div>
+            <span>了解如何在YouTube上使用Three.js构建此游戏</span>
+        </a>
+
+        <p>
+            点我
+            <a href="https://twitter.com/HunorBorbely" , target="_top">@HunorBorbely</a>
+        </p>
+    </div>
+</div>
+
+<a id="youtube-main" class="youtube" target="_top" href="https://youtu.be/JhgBwJn1bQw">
+    <span>学习Three.js</span>
+</a>
+<div id="youtube-card">
+    在YouTube上构建此游戏时学习Three.js
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.min.js'></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+
+</html>
+
+

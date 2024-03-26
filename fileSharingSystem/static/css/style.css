@@ -1,0 +1,53 @@
+/*
+ Copyright (c) 2024. All rights reserved.
+ This source code is licensed under the CC BY-NC-ND
+ (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+ This software is protected by copyright law. Reproduction, distribution, or use for commercial
+ purposes is prohibited without the author's permission. If you have any questions or require
+ permission, please contact the author: 2207150234@st.sziit.edu.cn
+ */
+body {
+    background-image: url("../imgs/背景4.jpg");
+    /*background-size: cover;*/
+    background-size: 100% 100%;
+    /*background-repeat: no-repeat;*/
+    background-attachment: fixed;
+}
+
+dt {
+    background-color: rgba(94, 93, 93, 0.49);
+    border-radius: 6px;
+}
+
+dt > dt {
+    /*padding-left: 20px;*/
+    margin-left: 20px;
+}
+
+/*@media (max-width: 980px) {*/
+/*    !* 小于980px改变 *!*/
+/*    body {*/
+/*        background-image: url("../imgs/背景3.jpg");*/
+/*    }*/
+
+/*    .list {*/
+/*        font-size: 50px;*/
+/*    }*/
+
+/*    label {*/
+/*        font-size: 40px;*/
+/*    }*/
+
+/*    input {*/
+/*        height: 40px;*/
+/*        width: 500px;*/
+/*        font-size: 35px;*/
+/*    }*/
+
+/*    button {*/
+/*        height: 40px;*/
+/*        width: 150px;*/
+/*        font-size: 35px;*/
+/*        border-radius: 20px;*/
+/*    }*/
+/*}*/
