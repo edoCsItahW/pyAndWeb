@@ -106,7 +106,7 @@ def qListInit():
 def qListRef():
     print(req := request.json)
     prot3 = {
-        "key": keyDict,
+        "key":      keyDict,
         "question": sql.toApiFormat(sql.getValueFromKey(sql.transfromDict(req)))
     }
     return jsonify({"code": 200, "msg": "ok", "data": {"3": prot3}})
@@ -115,12 +115,11 @@ def qListRef():
 @api_blue.route("/exam", methods=["POST"])
 def exam():
     data = {
-        "key": keyDict,
+        "key":      keyDict,
         "question": sql.toApiFormat(sql.getValueFromKey(sql.transfromDict(request.json)))
     }
 
     with jsonOpen(r"C:\Users\Lenovo\Desktop\siftTemp.json", "w") as file:
-
         file.update([(request.remote_addr, data)])
 
     return jsonify({"data": url_for("politicsExam")})  # redirect(url_for("api.origin"))

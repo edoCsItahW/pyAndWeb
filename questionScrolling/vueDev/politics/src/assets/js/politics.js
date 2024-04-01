@@ -23,14 +23,14 @@ class funcSet {
     }
 
     static async request(url, reqHead, port, data) {
-        /*
-        发送请求
-
-        @param {string} url - 目标路径
-        @param {string} reqHead - 用于描述请求部分和目的的字段
-        @param {number} port - 请求端口
-        @param {object} data 请求内容
-        @return {object} 返回的json数据,包括code,msg,body
+        /**
+         * 发送请求
+         * 
+         * @param {string} url - 目标路径
+         * @param {string} reqHead - 用于描述请求部分和目的的字段
+         * @param {number} port - 请求端口
+         * @param {object} data 请求内容
+         * @return {object} 返回的json数据,包括code,msg,body
         */
         const response = await fetch(url + reqHead, {
             method: "POST",
