@@ -293,6 +293,9 @@ export default {
         },
         beginExam() {
             funcSet.request(apiUrl, "exam", 1, funcSet.serialize(BF.byId("siftfrom"), "name"))
+                .then(res => {
+                    open(res.data)
+                })
         }
     }
 }

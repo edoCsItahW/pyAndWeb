@@ -15,6 +15,8 @@
 # -------------------------<Lenovo>----------------------------
 from flask import Flask, render_template, request, jsonify
 from api.view import api_blue
+# from functools import
+
 
 app = Flask(__name__, static_folder=r".\static", template_folder=r".\template")
 

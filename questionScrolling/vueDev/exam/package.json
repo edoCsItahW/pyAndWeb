@@ -13,6 +13,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.1.6"
+    "jsPackage": "file://D:/xst_project_202212/codeSet/pyAndWeb/jsPackage",
+    "mockjs": "^1.1.0",
+    "vite": "^5.1.6",
+    "vite-plugin-mock": "^3.0.1"
   }
 }

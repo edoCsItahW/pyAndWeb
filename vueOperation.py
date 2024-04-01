@@ -17,7 +17,7 @@ from systemTools import instruct
 from functools import wraps, cached_property
 from threading import Thread
 from inspect import stack
-from typing import Callable
+from typing import Callable, Literal
 from time import sleep
 from os import PathLike, path, remove, mkdir
 from re import sub, Pattern, RegexFlag, DOTALL, NOFLAG
@@ -29,7 +29,7 @@ __copyright__ = """/*
  This software is protected by copyright law. Reproduction, distribution, or use for commercial
  purposes is prohibited without the author's permission. If you have any questions or require
  permission, please contact the author: 2207150234@st.sziit.edu.cn
- */"""
+ */\n"""
 
 jsInitStr = """export default {
     data() {
@@ -39,6 +39,49 @@ jsInitStr = """export default {
     methods: {
     }
 }"""
+
+viteStr = """import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { viteMockServe } from 'vite-plugin-mock'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+    viteMockServe({mockPath: './src/mock'})
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  }
+})
+"""
+
+indexStr = """import { createProdMockServer } from "vite-plugin-mock/client"
+import MockMethod from './api'
+
+export function setupProdMockServer() {
+  createProdMockServer([...MockMethod])
+}
+"""
+
+apiStr = """export default [
+  {
+    url: '/mock/api/test', //请求地址
+    method: 'get', //请求方式
+    response: () => {
+      return {
+        code: 200,
+        msg: 'ok',
+        data: ''
+      }
+    },
+  },
+]
+"""
 
 
 class handleError:
@@ -84,6 +127,7 @@ class vue:
         self._rootDir = rootDir
 
         self._vueInit = vueInit(rootDir)
+        self._vueMock = vueMock(rootDir)
 
         if not path.isabs(self._rootDir):
             raise RuntimeError() from FileNotFoundError()
@@ -103,6 +147,9 @@ class vue:
     @property
     def vueInit(self):
         return self._vueInit
+
+    @property
+    def vueMock(self): return self._vueMock
 
     @staticmethod
     def replaceFileContent(_path: str | PathLike[str], __old: str = None, __new: str = "", *, _sub: bool | Pattern[str] | str = False, flag: RegexFlag | int = NOFLAG):
@@ -207,6 +254,18 @@ class vue:
             thread: Thread
             thread.join()
 
+    def beginMock(self):
+
+        self.vueMock.npmMock()
+
+        self.vueMock.modeifyConfig()
+
+        self.vueMock.createMockDir()
+
+        self.vueMock.createIndex()
+
+        self.vueMock.createApi()
+
 
 class vueInit:  # (vue):
     def __init__(self, rootDir: PathLike[str] | str):
@@ -301,7 +360,49 @@ class vueInit:  # (vue):
 
 
 class vueBuild:
-    pass
+    def __init__(self):
+        pass
+
+
+class vueMock:
+    def __init__(self, rootDir: str | PathLike[str]):
+        self._rootDir = rootDir
+        self.executor = instruct(ignore=True)
+
+    @property
+    def rootDir(self): return self._rootDir
+
+    @cached_property
+    def srcPath(self): return path.join(self.rootDir, "src")
+
+    @cached_property
+    def mockPath(self): return path.join(self.srcPath, "mock")
+
+    def npmMock(self):
+
+        self.executor("npm install vite-plugin-mock --save-dev", cwd=self.rootDir)
+
+    def modeifyConfig(self):
+
+        with open(path.join(self.rootDir, "vite.config.js"), "w", encoding="utf-8") as file:
+
+            file.write(viteStr)
+
+    def createMockDir(self):
+
+        mkdir(path.join(self.srcPath, "mock"))
+
+    def createIndex(self):
+
+        with open(path.join(self.mockPath, "index.js"), "w", encoding="utf-8") as file:
+
+            file.write(__copyright__ + indexStr)
+
+    def createApi(self):
+
+        with open(path.join(self.mockPath, "api.js"), "w", encoding="utf-8") as file:
+
+            file.write(__copyright__ + apiStr)
 
 
 @handleError.getparam(1)
@@ -311,5 +412,7 @@ def a():
 
 if __name__ == '__main__':
     ins = vue(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\vueDev\exam")
-    ins.beginInit()
+    # ins.beginInit()
+    ins.beginMock()
     # MessageBox(0, "Hello PYwin32", "MessageBox", MB_OK | MB_ICONWARNING)
+    pass

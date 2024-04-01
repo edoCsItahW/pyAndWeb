@@ -7,6 +7,12 @@
 
 from sqlTools import baseSQL
 from functools import cache
+from os import PathLike
+from contextlib import contextmanager
+from json import load, dump
+from typing import Literal, Any
+from warnings import warn
+from types import TracebackType
 
 
 class jsonSql(baseSQL):
@@ -14,7 +20,7 @@ class jsonSql(baseSQL):
         super().__init__(*args, **kwargs)
 
     def transfromDict(self, dictList: dict):
-        dictList = dictList["3"]
+        dictList = dictList["1"]
 
         labelDict = {tuple(self.selectColumn(None, ("type", ), show=False)): "type", tuple(self.selectColumn(None, ("chapter", ), show=False)): "chapter"}
 
@@ -60,9 +66,127 @@ class jsonSql(baseSQL):
         return result
 
 
+# @contextmanager
+# def openJson(file: str | bytes | PathLike[str] | PathLike[bytes], mode: Literal["r+", "+r", "w+", "+w", "a+", "+a", "w", "a", "r"]):
+#     resource = load(file := open(file))
+#
+#     try:
+#         yield resource
+#
+#     finally:
+#         file.close()
+
+
+class jsonFile:
+    def __init__(self, jsonDict: dict):
+        self._json = jsonDict
+
+        if not isinstance(self._json, dict):
+            raise TypeError(f"参数`jsonDict`必须为字典(dict)类型,你的输入类型: '{type(self._json)}'")
+
+    @property
+    def jsonData(self): return self._json
+
+    @jsonData.setter
+    def jsonData(self, value: dict):
+
+        if not isinstance(self._json, dict):
+
+            raise TypeError(f"参数`jsonDict`必须为字典(dict)类型,你的输入类型: '{type(value)}'")
+
+    def _pairParser(self, key: Any, value: Any):
+        if key in self.jsonData:
+
+            if isinstance(self.jsonData[key], list):
+
+                self.jsonData[key].append(value)
+
+            else:
+
+                self.jsonData[key] = value
+
+        else:
+
+            self.jsonData.update([(key, value)])
+
+    def update(self, __m: list[tuple[Any, Any]]):
+
+        if not isinstance(__m, list) or any([not isinstance(i, tuple) for i in __m]):
+            raise ValueError(
+                f"传入的位置参数`__m`必须形如'[('key': 'value')]',你的输入'{__m}'")
+
+        for t in __m:
+
+            self._pairParser(*t)
+
+    def read(self): return self.jsonData
+
+    def write(self, __d: dict = None):
+
+        if __d is None:
+
+            __d = self.jsonData
+
+        else:
+
+            self.jsonData = __d
+
+
+class jsonOpen:
+    def __init__(self, file: str | bytes | PathLike[str] | PathLike[bytes], mode: Literal["r+", "+r", "w+", "+w", "a+", "+a", "w", "a", "r"]):
+        self._filePath = file
+        self._mode = mode
+        self._jsonfile: jsonFile = None
+
+    @property
+    def _file(self): return self._jsonfile
+
+    @_file.setter
+    def _file(self, value: Any):
+
+        self._jsonfile = value
+
+    def __enter__(self):
+
+        with open(self._filePath, "r") as File:
+
+            self._file = jsonFile(load(File))
+
+            return self._file
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+
+        if any([exc_type, exc_val, exc_tb]):
+
+            exc_tb: TracebackType
+            warn(f"一个错误被捕获了: {exc_type}({exc_val}), line {exc_tb.tb_lineno}")
+
+        if self._mode != "r":
+            with open(self._filePath, self._mode) as file:
+
+                dump(self._file.jsonData, file)
+
+
 if __name__ == "__main__":
-    sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
+    # sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
     # sql.getValueFromKey("type")
-    sql.showTableContent()
+    # sql.showTableContent()
     # sql.selectColumn(None, ("*", ), condition="where type = 'sChoice' or type = 'multChoice'")
-# luozu.online/
+    pass
+    # class MyContextManager:
+    #     def __enter__(self):
+    #         print("Entering the context")
+    #         return self
+    #
+    #     def __exit__(self, exc_type, exc_value, exc_tb):
+    #         if exc_type is not None:  # 如果发生了异常
+    #             print(f"An exception occurred of type {exc_type.__name__}")
+    #             print(f"Exception value: {str(exc_value)}")
+    #             # 打印跟踪回溯信息（可选）
+    #             exc_tb: TracebackType
+    #             print(exc_tb)
+    #             # 注意：在实际应用中，你可能希望记录这些信息或者进行其他处理，而不是仅仅打印出来。
+    #
+    #
+    # with MyContextManager():
+    #     raise ValueError("This is a deliberate error to demonstrate exc_type, exc_value and traceback.")

@@ -13,8 +13,10 @@
 # 编码模式: utf-8
 # 注释: 
 # -------------------------<Lenovo>----------------------------
-from flask import Blueprint, request, jsonify, render_template, url_for, redirect
-from support import jsonSql  # type: ignore
+from flask import Blueprint, request, jsonify, render_template, url_for, redirect, Response
+# from support import jsonSql, jsonOpen  # type: ignore
+from project.questionScrolling.support import jsonOpen, jsonSql
+from json import load, dump
 
 api_blue = Blueprint("api", __name__, template_folder=r"..\template")
 
@@ -112,8 +114,16 @@ def qListRef():
 
 @api_blue.route("/exam", methods=["POST"])
 def exam():
-    print(req := request.json)
-    return redirect(url_for("politicsExam"))
+    data = {
+        "key": keyDict,
+        "question": sql.toApiFormat(sql.getValueFromKey(sql.transfromDict(request.json)))
+    }
+
+    with jsonOpen(r"C:\Users\Lenovo\Desktop\siftTemp.json", "w") as file:
+
+        file.update([(request.remote_addr, data)])
+
+    return jsonify({"data": url_for("politicsExam")})  # redirect(url_for("api.origin"))
 
 
 if __name__ == '__main__':
