@@ -8,27 +8,55 @@
  */
 const examInit = {
     "key": {
-        "sChoice": "\u5355\u9009\u9898",
-        "multChoice": "\u591a\u9009\u9898",
-        "anQuestion": "\u8fa8\u6790\u9898"
+      "sChoice": "\u5355\u9009\u9898",
+      "multChoice": "\u591a\u9009\u9898",
+      "anQuestion": "\u8fa8\u6790\u9898"
     },
     "question": {
-        "sChoice": [{
-            "chapter": "chapter1",
-            "question": "\u793a\u4f8b\u9898\u76ee1",
-            "option": ["A\u9009\u9879", "B\u9009\u9879", "C\u9009\u9879", "D\u9009\u9879"],
-            "answer": "B",
-            "note": null
-        }],
-        "multChoice": [{
-            "chapter": "chapter2",
-            "question": "\u793a\u4f8b\u9898\u76ee2",
-            "option": ["A\u9009\u9879", "B\u9009\u9879", "C\u9009\u9879", "D\u9009\u9879"],
-            "answer": "[B, D]",
-            "note": null
-        }]
+      "sChoice": [
+        {
+          "chapter": "chapter1",
+          "question": "\u793a\u4f8b\u9898\u76ee1",
+          "option": [
+            "A\u9009\u9879",
+            "B\u9009\u9879",
+            "C\u9009\u9879",
+            "D\u9009\u9879"
+          ],
+          "answer": "B",
+          "note": null
+        }
+      ],
+      "multChoice": [
+        {
+          "chapter": "chapter2",
+          "question": "\u793a\u4f8b\u9898\u76ee2",
+          "option": [
+            "A\u9009\u9879",
+            "B\u9009\u9879",
+            "C\u9009\u9879",
+            "D\u9009\u9879"
+          ],
+          "answer": "[B, D]",
+          "note": null
+        }
+      ],
+      "anQuestion": [
+        {
+          "chapter": "chapter3",
+          "question": "\u793a\u4f8b\u9898\u76ee3",
+          "option": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "answer": "\u8fd9\u662f\u5927\u9898",
+          "note": null
+        }
+      ]
     }
-}
+  }
 
 
 export default [

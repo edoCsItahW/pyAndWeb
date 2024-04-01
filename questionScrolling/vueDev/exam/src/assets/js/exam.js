@@ -16,10 +16,12 @@ class handleData {
     constructor(data) {
         
         this.checkData(data, "question")
+        this.checkData(data, "key")
 
         this._data = data["question"]
+        this._key = data["key"]
 
-        this.topDiv = elemOption._createNewElement($.id("app"), "div")
+        this.topDiv = elemOption._createNewElement($.id("app"), "div", null, "container")
     }
 
     get data() {return this._data}
@@ -31,24 +33,34 @@ class handleData {
         if (typeof value === "object") {this._data = value}
     }
 
+    get key() {return this._key}
+
     checkData(data, key) {
-        if (!key in data) {
-            console.log(`没有键: '${key}'`)
+        if (typeof data === "object") {
+
+           if (!(key in data)) {
+                console.log(`没有键: '${key}'`)
+            }
+
         }
+        else {
+            console.warn(`'data'为${typeof data}`)
+        }
+
     }
 
     sChoiceDo() {
         let elemArray = []
 
         if ("sChoice" in this.data) {
-            const sChoiceDiv = elemOption._createNewElement(this.topDiv, "div")
+            const sChoiceDiv = elemOption._createNewElement(this.topDiv, "div", null, "quesblock")
             
             this.data["sChoice"].forEach(dict => {
                 const quesDiv = elemOption._createNewElement(sChoiceDiv, "div")
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}: ${dict["note"]}`)
 
-                elemOption._createNewElement(quesDiv, "p", dict["question"])
+                elemOption._createNewElement(quesDiv, "p", `(${this.key["sChoice"]})${dict["question"]}`)
 
                 const from = elemOption._createNewElement(quesDiv, "from")
 
@@ -71,18 +83,16 @@ class handleData {
         }
     }
 
-    ChoiceDo() {
-        let elemArray = []
+    multChoiceDo() {
+        if ("multChoice" in this.data) {
+            const sChoiceDiv = elemOption._createNewElement(this.topDiv, "div", null, "quesblock")
 
-        if ("sChoice" in this.data) {
-            const sChoiceDiv = elemOption._createNewElement(this.topDiv, "div")
-
-            this.data["sChoice"].forEach(dict => {
+            this.data["multChoice"].forEach(dict => {
                 const quesDiv = elemOption._createNewElement(sChoiceDiv, "div")
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}: ${dict["note"]}`)
 
-                elemOption._createNewElement(quesDiv, "p", dict["question"])
+                elemOption._createNewElement(quesDiv, "p", `(${this.key["multChoice"]})${dict["question"]}`)
 
                 const from = elemOption._createNewElement(quesDiv, "from")
 
@@ -91,23 +101,23 @@ class handleData {
 
                     const optionDiv = elemOption._createNewElement(from, "div")
 
-                    const input = elemOption._createNewElement(optionDiv, "input", null, null, hash, {type: "checkbox"})
+                    elemOption._createNewElement(optionDiv, "input", null, null, hash, {type: "checkbox"})
                     elemOption._createNewElement(optionDiv, "label", str, null, null, {for: hash})
 
-                    elemArray.push(input)
                 })
-
-
             })
-
-            elemOption.elementRepel(elemArray)
-
         }
+    }
+
+    anQuestionDo() {
+
     }
 
     beginSpawn() {
         
         this.sChoiceDo()
+
+        this.multChoiceDo()
     }
 
 }
