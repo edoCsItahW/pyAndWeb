@@ -77,3 +77,9 @@ blockquote {
 .choice {
     animation: choice .5s forwards;
 }
+
+.submit {
+    background-color: #ffffff;
+    text-align: center;
+    margin: 20px;
+}

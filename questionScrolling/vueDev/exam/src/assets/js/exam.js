@@ -21,7 +21,7 @@ class handleData {
         this._data = data["question"]
         this._key = data["key"]
 
-        this.topDiv = elemOption._createNewElement($.id("app"), "div", null, "container")
+        this.topDiv = $.class("container")
 
         this.optionArray = ["A", "B", "C", "D"]
     }
@@ -54,10 +54,12 @@ class handleData {
     sChoiceDo() {
         let elemArray = []
 
+        const sChoiceDiv = $.id("schoice")
+
         if ("sChoice" in this.data) {
-            const sChoiceDiv = elemOption._createNewElement(this.topDiv, "div", null, "quesblock")
-            
+
             this.data["sChoice"].forEach(dict => {
+
                 const quesDiv = elemOption._createNewElement(sChoiceDiv, "div")
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}`)
@@ -67,12 +69,8 @@ class handleData {
                 const from = elemOption._createNewElement(quesDiv, "from", null, "optionfrom")
 
                 dict["option"].forEach((str, i) => {
-                    // const hash = $.toHash(str)
 
                     const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option")
-
-                    // const input = elemOption._createNewElement(optionDiv, "input", null, null, hash, {type: "checkbox"})
-                    // elemOption._createNewElement(optionDiv, "label", str, null, null, {for: hash})
 
                     elemArray.push(optionDiv)
                 })
@@ -80,16 +78,18 @@ class handleData {
 
             })
 
-            elemOption.elementRepel(elemArray, "click", "classList", "[option choice]")
+            elemOption.elementRepel(elemArray, "click", "classList")
 
         }
     }
 
     multChoiceDo() {
         if ("multChoice" in this.data) {
-            const sChoiceDiv = elemOption._createNewElement(this.topDiv, "div", null, "quesblock")
+
+            const sChoiceDiv =  $.id("multchoice")
 
             this.data["multChoice"].forEach(dict => {
+
                 const quesDiv = elemOption._createNewElement(sChoiceDiv, "div")
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}`)
@@ -99,20 +99,21 @@ class handleData {
                 const from = elemOption._createNewElement(quesDiv, "from", null, "optionfrom")
 
                 dict["option"].forEach((str, i) => {
-                    // const hash = $.toHash(str)
 
                     const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option")
 
                     optionDiv.addEventListener("click", ev => {
+
                         if (Array.from(ev.target.classList).includes("choice")) {
+
                             ev.target.classList.remove("choice")
+
                         }
                         else {
-                            ev.target.classList.add("choice")
-                        }})
 
-                    // elemOption._createNewElement(optionDiv, "input", null, null, hash, {type: "checkbox"})
-                    // elemOption._createNewElement(optionDiv, "label", str, null, null, {for: hash})
+                            ev.target.classList.add("choice")
+
+                        }})
 
                 })
             })
@@ -120,8 +121,10 @@ class handleData {
     }
 
     anQuestionDo() {
+        const anQuestionDiv =  $.id("anquestion")
+
         if ("anQuestion" in this.data) {
-            const anQuestionDiv = elemOption._createNewElement(this.topDiv, "div", null, "quesblock")
+            anQuestionDiv.style.display = "block"
 
             this.data["anQuestion"].forEach(dict => {
                 const quesDiv = elemOption._createNewElement(anQuestionDiv, "div", null, "anques")
@@ -132,6 +135,9 @@ class handleData {
 
                 elemOption._createNewElement(quesDiv, "textarea", null, "textinput")
             })
+        }
+        else {
+            anQuestionDiv.style.display = "none"
         }
     }
 
