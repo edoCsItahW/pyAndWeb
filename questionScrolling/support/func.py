@@ -172,6 +172,8 @@ if __name__ == "__main__":
     # sql.getValueFromKey("type")
     # sql.showTableContent()
     # sql.selectColumn(None, ("*", ), condition="where type = 'sChoice' or type = 'multChoice'")
+    for i in range(101):
+        print(f"{i}% {{background-image: linear-gradient(to right, #1cc685 {f'{i}%'}, #0eafff);}}")
     pass
     # class MyContextManager:
     #     def __enter__(self):

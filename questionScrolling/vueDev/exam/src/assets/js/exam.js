@@ -11,6 +11,8 @@ import { $, elemOption, request, route } from "jsPackage/src/commonlyFunc/index.
 
 const api = route.join(location.href, "api")
 
+const response = request(api, "examInit", null)
+
 
 class handleData {
     constructor(data) {
@@ -70,7 +72,9 @@ class handleData {
 
                 dict["option"].forEach((str, i) => {
 
-                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option")
+                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option", null, {option: this.optionArray[i]})
+
+                    optionDiv.setAttribute("answer", dict["answer"])
 
                     elemArray.push(optionDiv)
                 })
@@ -100,7 +104,9 @@ class handleData {
 
                 dict["option"].forEach((str, i) => {
 
-                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option")
+                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option", null, {option: this.optionArray[i]})
+
+                    optionDiv.setAttribute("answer", dict["answer"])
 
                     optionDiv.addEventListener("click", ev => {
 
@@ -154,8 +160,7 @@ class handleData {
 
 
 onload = () => {
-    request(api, "examInit", null)
-    .then(res => {
+    response.then(res => {
         const ins = new handleData(res.data)
         ins.beginSpawn()
     })
@@ -168,5 +173,23 @@ export default {
         }
     },
     methods: {
+        submit() {
+            Array.from($.class("choice", "*")).forEach(elem => this.correcting(elem))
+        },
+        correcting(element) {
+            const answer = element.getAttribute("answer")
+
+            let res
+
+            if (answer.length === 1) {
+                res = (answer === element.getAttribute("option"))
+            }
+            else {
+                res = answer.includes(element.getAttribute("option"))
+            }
+
+            element.classList.remove("choice")
+            element.style.backgroundColor = (res ? "#00d985" : "#ff2929")
+        }
     }
 }

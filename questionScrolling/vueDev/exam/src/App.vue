@@ -11,9 +11,9 @@
     <div class="quesblock" id="anquestion">
 
     </div>
-  </div>
-  <div class="submit">
-    提交
+    <div class="submit" @click="submit()">
+      提交
+    </div>
   </div>
 </template>
 

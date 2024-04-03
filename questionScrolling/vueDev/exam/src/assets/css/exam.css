@@ -25,6 +25,15 @@
     }
 }
 
+@keyframes submit {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(.98);
+    }
+}
+
 body {
     background-color: #58c6ff;
 }
@@ -79,7 +88,14 @@ blockquote {
 }
 
 .submit {
-    background-color: #ffffff;
+    background-color: #feff41;
     text-align: center;
-    margin: 20px;
+    border: 2px solid rgba(60, 60, 62, 0.45);
+    border-radius: 10px;
+    margin: 1px 3px;
+    padding: 10px 5px;
+}
+
+.submit:hover {
+    animation: submit .7s forwards;
 }
