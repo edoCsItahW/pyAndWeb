@@ -99,3 +99,25 @@ blockquote {
 .submit:hover {
     animation: submit .7s forwards;
 }
+
+.right {
+    background-color: #00d985;
+    border: 2px solid #ffffff00;
+}
+
+.mistake {
+    background-color: #ff2929;
+    border: 2px solid #ffffff00;
+}
+
+.answer {
+    /* border-bottom: 2px solid #000000; */
+    font-family: 'chineseFont', Arial, sans-serif;
+    font-size: 20px;
+    color: #0e22ff;
+    margin: 0 10px;
+}
+
+.answer::before {
+    content: "答案: ";
+}

@@ -6,7 +6,7 @@
  purposes is prohibited without the author's permission. If you have any questions or require
  permission, please contact the author: 2207150234@st.sziit.edu.cn
  */
-import { $, elemOption, request, route } from "jsPackage/src/commonlyFunc/index.js"
+import {$, elemOption, request, route} from "jsPackage/src/commonlyFunc/index.js"
 
 
 const api = route.join(location.href, "api")
@@ -16,7 +16,7 @@ const response = request(api, "examInit", null)
 
 class handleData {
     constructor(data) {
-        
+
         this.checkData(data, "question")
         this.checkData(data, "key")
 
@@ -28,26 +28,31 @@ class handleData {
         this.optionArray = ["A", "B", "C", "D"]
     }
 
-    get data() {return this._data}
+    get data() {
+        return this._data
+    }
 
     /**
      * @param {any} value
      */
     set date(value) {
-        if (typeof value === "object") {this._data = value}
+        if (typeof value === "object") {
+            this._data = value
+        }
     }
 
-    get key() {return this._key}
+    get key() {
+        return this._key
+    }
 
     checkData(data, key) {
         if (typeof data === "object") {
 
-           if (!(key in data)) {
+            if (!(key in data)) {
                 console.log(`没有键: '${key}'`)
             }
 
-        }
-        else {
+        } else {
             console.warn(`'data'为${typeof data}`)
         }
 
@@ -62,7 +67,7 @@ class handleData {
 
             this.data["sChoice"].forEach(dict => {
 
-                const quesDiv = elemOption._createNewElement(sChoiceDiv, "div")
+                const quesDiv = elemOption._createNewElement(sChoiceDiv, "div", null, "quesdiv", null,  {answer: dict['answer']})
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}`)
 
@@ -72,7 +77,7 @@ class handleData {
 
                 dict["option"].forEach((str, i) => {
 
-                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option", null, {option: this.optionArray[i]})
+                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, ["option", "enable"], null, {option: this.optionArray[i]})
 
                     optionDiv.setAttribute("answer", dict["answer"])
 
@@ -90,11 +95,11 @@ class handleData {
     multChoiceDo() {
         if ("multChoice" in this.data) {
 
-            const sChoiceDiv =  $.id("multchoice")
+            const sChoiceDiv = $.id("multchoice")
 
             this.data["multChoice"].forEach(dict => {
 
-                const quesDiv = elemOption._createNewElement(sChoiceDiv, "div")
+                const quesDiv = elemOption._createNewElement(sChoiceDiv, "div", null, "quesdiv", null, {answer: dict['answer']})
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}`)
 
@@ -104,22 +109,27 @@ class handleData {
 
                 dict["option"].forEach((str, i) => {
 
-                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, "option", null, {option: this.optionArray[i]})
+                    const optionDiv = elemOption._createNewElement(from, "div", `${this.optionArray[i]}.${str}`, ["option", "enable"], null, {option: this.optionArray[i]})
 
                     optionDiv.setAttribute("answer", dict["answer"])
 
                     optionDiv.addEventListener("click", ev => {
 
-                        if (Array.from(ev.target.classList).includes("choice")) {
+                        let classList = Array.from(ev.target.classList)
 
-                            ev.target.classList.remove("choice")
+                        if (classList.includes("enable")) {
 
+                            if (classList.includes("choice")) {
+
+                                ev.target.classList.remove("choice")
+
+                            } else {
+
+                                ev.target.classList.add("choice")
+
+                            }
                         }
-                        else {
-
-                            ev.target.classList.add("choice")
-
-                        }})
+                    })
 
                 })
             })
@@ -127,13 +137,13 @@ class handleData {
     }
 
     anQuestionDo() {
-        const anQuestionDiv =  $.id("anquestion")
+        const anQuestionDiv = $.id("anquestion")
 
         if ("anQuestion" in this.data) {
             anQuestionDiv.style.display = "block"
 
             this.data["anQuestion"].forEach(dict => {
-                const quesDiv = elemOption._createNewElement(anQuestionDiv, "div", null, "anques")
+                const quesDiv = elemOption._createNewElement(anQuestionDiv, "div", null, ["anques", "quesdiv"], null, {answer: dict["answer"]})
 
                 elemOption._createNewElement(quesDiv, "blockquote", `${dict["chapter"]}`)
 
@@ -148,7 +158,7 @@ class handleData {
     }
 
     beginSpawn() {
-        
+
         this.sChoiceDo()
 
         this.multChoiceDo()
@@ -169,11 +179,14 @@ onload = () => {
 
 export default {
     data() {
-        return {
-        }
+        return {}
     },
     methods: {
         submit() {
+            Array.from($.class("option", "*")).forEach(elem => elem.classList.remove("enable"))
+
+            Array.from($.class("quesdiv", "*")).forEach(elem => elemOption._createNewElement(elem, "div", elem.getAttribute('answer'), 'answer'))
+
             Array.from($.class("choice", "*")).forEach(elem => this.correcting(elem))
         },
         correcting(element) {
@@ -183,13 +196,13 @@ export default {
 
             if (answer.length === 1) {
                 res = (answer === element.getAttribute("option"))
-            }
-            else {
+            } else {
                 res = answer.includes(element.getAttribute("option"))
             }
 
             element.classList.remove("choice")
-            element.style.backgroundColor = (res ? "#00d985" : "#ff2929")
+
+            element.classList.add(res ? "right" : "mistake")
         }
     }
 }

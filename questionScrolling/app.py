@@ -14,7 +14,8 @@
 # 注释: 
 # -------------------------<Lenovo>----------------------------
 from flask import Flask, render_template, request, jsonify
-from api.view import api_blue
+from api.api import api_blue
+from api.examApi import examApi_blue
 # from functools import
 
 
@@ -38,4 +39,5 @@ def politicsExam():
 
 if __name__ == '__main__':
     app.register_blueprint(api_blue, url_prefix="/politics/api")
+    app.register_blueprint(examApi_blue, url_prefix="/politics/exam/api")
     app.run(host="0.0.0.0", debug=True)

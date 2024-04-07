@@ -7,12 +7,13 @@
 
 from sqlTools import baseSQL
 from functools import cache
-from os import PathLike
+from os import PathLike, path
 from contextlib import contextmanager
 from json import load, dump
 from typing import Literal, Any
 from warnings import warn
 from types import TracebackType
+from re import findall, DOTALL
 
 
 class jsonSql(baseSQL):
@@ -22,7 +23,11 @@ class jsonSql(baseSQL):
     def transfromDict(self, dictList: dict):
         dictList = dictList["1"]
 
-        labelDict = {tuple(self.selectColumn(None, ("type", ), show=False)): "type", tuple(self.selectColumn(None, ("chapter", ), show=False)): "chapter"}
+        labelDict = {
+            tuple(self.selectColumn(None, ("type", ), show=False)): "type",
+            tuple(self.selectColumn(None, ("chapter", ), show=False)): "chapter",
+            tuple(self.selectColumn(None, ("other", ), show=False)): "other"
+        }
 
         labelList = [d['name'] for d in dictList if (value := d['value'])]
 
@@ -134,9 +139,11 @@ class jsonFile:
 
 class jsonOpen:
     def __init__(self, file: str | bytes | PathLike[str] | PathLike[bytes], mode: Literal["r+", "+r", "w+", "+w", "a+", "+a", "w", "a", "r"]):
-        self._filePath = file
+        self._filePath = path.abspath(file)
         self._mode = mode
         self._jsonfile: jsonFile = None
+
+        if not path.exists(self._filePath): raise FileNotFoundError(f"找不到文件: '{self._filePath}'")
 
     @property
     def _file(self): return self._jsonfile
@@ -167,14 +174,42 @@ class jsonOpen:
                 dump(self._file.jsonData, file)
 
 
+class contentParser:
+    def __init__(self, textPath: str | PathLike[str]):
+        self._textPath = textPath
+
+        if not path.exists(self._textPath): raise FileNotFoundError(f"找不到文件: '{self._textPath}'")
+
+    @property
+    def text(self):
+        with open(self._textPath, "r", encoding="utf-8") as file:
+
+            return file.read()
+
+    def parser(self):
+        print(findall(r"\d\..*?D.*?(?=\d)", self.text, flags=DOTALL))
+
+
 if __name__ == "__main__":
-    # sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
+    sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
+    print(sql.toApiFormat(sql.getValueFromKey(sql.transfromDict({'1': [
+        {'name': 'all', 'value': False},
+        {'name': 'anQuestion', 'value': True},
+        {'name': 'multChoice', 'value': True},
+        {'name': 'sChoice', 'value': True},
+        {'name': 'chapter1', 'value': True},
+        {'name': 'chapter2', 'value': True},
+        {'name': 'other1', 'value': True}
+    ]}))))
     # sql.getValueFromKey("type")
-    # sql.showTableContent()
+    sql.showTableContent()
+    # sql.update(None, "where id = 3", other="other1")
     # sql.selectColumn(None, ("*", ), condition="where type = 'sChoice' or type = 'multChoice'")
-    for i in range(101):
-        print(f"{i}% {{background-image: linear-gradient(to right, #1cc685 {f'{i}%'}, #0eafff);}}")
-    pass
+    # for i in range(101):
+    #     print(f"{i}% {{background-image: linear-gradient(to right, #1cc685 {f'{i}%'}, #0eafff);}}")
+    # pass
+    # ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesContent.txt")
+    # ins.parser()
     # class MyContextManager:
     #     def __enter__(self):
     #         print("Entering the context")

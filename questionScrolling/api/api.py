@@ -119,7 +119,7 @@ def exam():
         "question": sql.toApiFormat(sql.getValueFromKey(sql.transfromDict(request.json)))
     }
 
-    with jsonOpen(r"C:\Users\Lenovo\Desktop\siftTemp.json", "w") as file:
+    with jsonOpen(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\json\siftTemp.json", "w") as file:
         file.update([(request.remote_addr, data)])
 
     return jsonify({"data": url_for("politicsExam")})  # redirect(url_for("api.origin"))
