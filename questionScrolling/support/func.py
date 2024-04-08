@@ -6,7 +6,7 @@
 #  permission, please contact the author: 2207150234@st.sziit.edu.cn
 
 from sqlTools import baseSQL
-from functools import cache
+from functools import cached_property
 from os import PathLike, path
 from contextlib import contextmanager
 from json import load, dump
@@ -14,6 +14,9 @@ from typing import Literal, Any
 from warnings import warn
 from types import TracebackType
 from re import findall, DOTALL
+from csv import reader, writer
+from pandas import DataFrame, set_option
+from functools import singledispatchmethod
 
 
 class jsonSql(baseSQL):
@@ -175,55 +178,116 @@ class jsonOpen:
 
 
 class contentParser:
-    def __init__(self, textPath: str | PathLike[str]):
+    def __init__(self, textPath: str | PathLike[str], csvPath: str | PathLike[str] = None, **kwargs):
+        if not kwargs: raise TypeError(
+            "contentParser.__init__() missing 1 required keyword-only argument: 'kwargs'")
+
         self._textPath = textPath
+        self._csvPath = csvPath
+
+        self.encludeList = ["$", "^", "|", "[", "{", "?", "+", "*"]
+
+        self.markDict = kwargs
+        self.quesDict = {k: [] for k in kwargs}
+
+        self.symbol = "\\"
 
         if not path.exists(self._textPath): raise FileNotFoundError(f"找不到文件: '{self._textPath}'")
 
-    @property
+    @cached_property
     def text(self):
         with open(self._textPath, "r", encoding="utf-8") as file:
 
             return file.read()
 
+    @property
+    def csvPath(self): return self._csvPath
+
+    @staticmethod
+    def normalDict(*, Id: int = '', content: str = '', optionA: str = '', optionB: str = '', optionC: str = '', optionD: str = '', answer: str = '', Type: str = '', chapter: str = '', other: str = '', note: str = ''):
+        return {"id": Id, "content": content, "optionA": optionA, "optionB": optionB, "optionC": optionC, "optionD": optionD, "answer": answer, "type": Type, "chapter": chapter, "other": other, "note": note}
+
+    def _blockParse(self, text: str, *, onlyContent: bool = False):
+
+        if onlyContent:
+
+            return self.normalDict(Id=(_ := findall(r"(\d{1,2})(?:.)?(.*?)$", text, DOTALL)[0])[0], content=_[1])
+
+        elif res := findall(r"(^\d{1,2})(?:.)?\.(.*?)A\.(.*?)B\.(.*?)C\.(.*?)D\.(.*?)$", text.replace("\n", ""), DOTALL):
+
+            return self.normalDict(Id=(t := res[0])[0], content=t[1], optionA=t[2], optionB=t[3], optionC=t[4], optionD=t[5])
+
+        else:
+            _ = text.replace('\n', '\n\t')
+            warn(  # 解析失败警告
+                f"题目解析失败:\n\t{_}")
+
+            try:
+
+                return self.normalDict(Id=findall(r"^\d", text)[0], content='Error: 解析失败')
+
+            except KeyError as err:
+
+                return self.normalDict(content='Error: 解析失败')
+
+    def escape(self, sym: str | tuple):
+
+        f = lambda s: f'{self.symbol}{s}' if s in self.encludeList else s
+
+        return tuple(f(i) for i in sym) if isinstance(sym, tuple) else f(sym)
+
     def parser(self):
-        print(findall(r"\d\..*?D.*?(?=\d)", self.text, flags=DOTALL))
+
+        for t in self.quesDict:
+
+            sym, flag = arg if isinstance(arg := self.markDict[t], tuple) else (arg[0], False)
+
+            for block in findall(fr"(?<={(_ := self.escape(sym))[0]}).*?(?={_[1]})" if isinstance(sym, tuple) else fr"(?<={(_ := self.escape(sym))}).*?(?={_})", self.text, flags=DOTALL):
+
+                res = self._blockParse(block, onlyContent=flag)
+
+                res["type"] = t
+
+                self.quesDict[t].append(res)
+
+    def write(self, *, All: bool = True):
+
+        if All: set_option('display.max_columns', None)
+
+        print("预览模式\n"
+              f"{(df := DataFrame(sum(self.quesDict.values(), start=[])))}")
+
+        if input("是否继续写入(Y/N): ").lower() == "y":
+
+            if not self.csvPath: raise ValueError(
+                "位置参数'csvPath'没有接收是空的,无法写入!")
+
+            with open(self.csvPath, "a", encoding="gbk", newline="") as file:
+
+                df.to_csv(self.csvPath, index=False, header=False, encoding="gbk")
+
+    def parsing(self):
+
+        self.parser()
+
+        self.write()
 
 
 if __name__ == "__main__":
-    sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
-    print(sql.toApiFormat(sql.getValueFromKey(sql.transfromDict({'1': [
-        {'name': 'all', 'value': False},
-        {'name': 'anQuestion', 'value': True},
-        {'name': 'multChoice', 'value': True},
-        {'name': 'sChoice', 'value': True},
-        {'name': 'chapter1', 'value': True},
-        {'name': 'chapter2', 'value': True},
-        {'name': 'other1', 'value': True}
-    ]}))))
+    # sql = jsonSql("root", "135246qq", "quesinfo", tableName="politics")
+    # print(sql.toApiFormat(sql.getValueFromKey(sql.transfromDict({'1': [
+    #     {'name': 'all', 'value': False},
+    #     {'name': 'anQuestion', 'value': True},
+    #     {'name': 'multChoice', 'value': True},
+    #     {'name': 'sChoice', 'value': True},
+    #     {'name': 'chapter1', 'value': True},
+    #     {'name': 'chapter2', 'value': True},
+    #     {'name': 'other1', 'value': True}
+    # ]}))))
     # sql.getValueFromKey("type")
-    sql.showTableContent()
+    # sql.showTableContent()
     # sql.update(None, "where id = 3", other="other1")
     # sql.selectColumn(None, ("*", ), condition="where type = 'sChoice' or type = 'multChoice'")
-    # for i in range(101):
-    #     print(f"{i}% {{background-image: linear-gradient(to right, #1cc685 {f'{i}%'}, #0eafff);}}")
-    # pass
-    # ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesContent.txt")
-    # ins.parser()
-    # class MyContextManager:
-    #     def __enter__(self):
-    #         print("Entering the context")
-    #         return self
-    #
-    #     def __exit__(self, exc_type, exc_value, exc_tb):
-    #         if exc_type is not None:  # 如果发生了异常
-    #             print(f"An exception occurred of type {exc_type.__name__}")
-    #             print(f"Exception value: {str(exc_value)}")
-    #             # 打印跟踪回溯信息（可选）
-    #             exc_tb: TracebackType
-    #             print(exc_tb)
-    #             # 注意：在实际应用中，你可能希望记录这些信息或者进行其他处理，而不是仅仅打印出来。
-    #
-    #
-    # with MyContextManager():
-    #     raise ValueError("This is a deliberate error to demonstrate exc_type, exc_value and traceback.")
+    ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesContent.txt", r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesData.csv", sChoice="$", multChoice="&")
+    ins.parsing()
+
