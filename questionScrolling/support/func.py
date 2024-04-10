@@ -141,7 +141,7 @@ class jsonFile:
 
 
 class jsonOpen:
-    def __init__(self, file: str | bytes | PathLike[str] | PathLike[bytes], mode: Literal["r+", "+r", "w+", "+w", "a+", "+a", "w", "a", "r"]):
+    def __init__(self, file: str | bytes | PathLike[str] | PathLike[bytes], mode: Literal["r+", "+r", "w+", "+w", "a+", "+a", "w", "a", "r"]):  # type: ignore
         self._filePath = path.abspath(file)
         self._mode = mode
         self._jsonfile: jsonFile = None
@@ -252,7 +252,10 @@ class contentParser:
 
     def write(self, *, All: bool = True):
 
-        if All: set_option('display.max_columns', None)
+        if All:
+            set_option('display.max_columns', None)
+            set_option('display.max_colwidth', None)
+            set_option('max_colwidth', 10)  # 内容长度控制
 
         print("预览模式\n"
               f"{(df := DataFrame(sum(self.quesDict.values(), start=[])))}")
@@ -288,6 +291,7 @@ if __name__ == "__main__":
     # sql.showTableContent()
     # sql.update(None, "where id = 3", other="other1")
     # sql.selectColumn(None, ("*", ), condition="where type = 'sChoice' or type = 'multChoice'")
-    ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesContent.txt", r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesData.csv", sChoice="$", multChoice="&")
+    ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\导论.txt", r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesData.csv",
+                        sChoice="$", multChoice="&", anQuestion=(("#", "%"), True), simQuestion=(("^", "*"), True), disQuestion=(("@", "~"), True))
     ins.parsing()
 
