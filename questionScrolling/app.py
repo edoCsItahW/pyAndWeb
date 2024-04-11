@@ -16,7 +16,6 @@
 from flask import Flask, render_template, request, jsonify
 from api.api import api_blue
 from api.examApi import examApi_blue
-# from functools import
 
 
 app = Flask(__name__, static_folder=r".\static", template_folder=r".\template")
@@ -24,16 +23,19 @@ app = Flask(__name__, static_folder=r".\static", template_folder=r".\template")
 
 @app.route("/", methods=["GET", "POST"])
 def root():
+
     return render_template(r"root.html")
 
 
 @app.route("/politics/")
 def politics():
+
     return render_template(r"politics.html")
 
 
 @app.route("/politics/exam", methods=["POST", "GET"])
 def politicsExam():
+
     return render_template(r"exam.html")
 
 

@@ -170,5 +170,16 @@ export default [
                 data: (Data => {console.log(Data); return {a: 1}})(data)
             }
         }
+    },
+    {
+        url: '/api/qListInit',
+        method: "POST",
+        response: data => {
+            return {
+                code: 200,
+                msg: "ok",
+                data: (Data => {console.log(Data); return {a: 1}})(data)
+            }
+        }
     }
 ]

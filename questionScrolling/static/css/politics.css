@@ -1,1 +1,243 @@
-@keyframes scaleUp{0%{transform:scale(1)}to{transform:scale(1.05)}}@keyframes darkenColor{0%{background-color:#36373a}to{background-color:#505356}}@keyframes addshadow{0%{box-shadow:0 0}to{box-shadow:2px 2px 5px #fdfdfd}}@keyframes prominent{0%{background-color:#1f2024}to{background-color:#ccc}}@keyframes shadow{0%{box-shadow:0 0}to{box-shadow:2px 2px 10px 5px #ccc}}@keyframes fontColor{0%{color:#ccc}to{color:#1f2024}}body{position:fixed;margin:0;padding:0;background-color:#000;width:100%}#siftIco{width:4%;height:auto;z-index:1}.imgcontainer{display:flex;justify-content:flex-end;align-items:center}.imgcontainer{margin-left:5px}#siftblock{position:fixed;right:-350px;top:50%;transform:translateY(-50%);width:300px;height:100%;background-color:#f8f9fa;padding:20px;box-shadow:0 0 10px #0000001a;transition:right .5s ease-in-out;pointer-events:none}#siftblock.show{right:0;pointer-events:auto}#siftIco{cursor:pointer}#siftfrom{display:flex;height:100%;flex-direction:column}.content{display:flex;flex-direction:row;justify-content:space-around;border-radius:5px;box-shadow:0 0 10px #0000001a;align-items:center;flex:1;width:100%;box-sizing:border-box;background-color:#fff;margin:10px}h1{text-align:center;margin-top:0;background-image:linear-gradient(to right,#40ff7e,#41efff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.qsdiv{border-radius:5px;background-color:#1f2024;height:100vh;padding-top:10px;width:100%}.queblock{border-radius:5px;padding-top:5px;padding-bottom:5px;background-color:#36373a;margin:0 5px 10px;transition:all .3s ease;color:#ccc}.queblock:hover{animation:scaleUp .3s forwards,darkenColor .3s forwards,addshadow .3s forwards}.quekey{margin-left:5%}.quetext{margin-left:10%}.begbutton{position:fixed;bottom:5%;margin:10px;right:30%;left:30%;text-align:center;font-size:24px;border-radius:5px;color:#ccc}.begbutton:hover{animation:prominent 1s forwards,shadow .7s forwards,fontColor 1s forwards}
+/*
+ Copyright (c) 2024. All rights reserved.
+ This source code is licensed under the CC BY-NC-ND
+ (Creative Commons Attribution-NonCommercial-NoDerivatives) License, By Xiao Songtao.
+ This software is protected by copyright law. Reproduction, distribution, or use for commercial
+ purposes is prohibited without the author's permission. If you have any questions or require
+ permission, please contact the author: 2207150234@st.sziit.edu.cn
+ */
+
+/*
+文本水平居中
+如果你想要将h1标题在水平方向上居中，你可以使用text-align属性。通常，这会在一个块级元素（比如div）内部使用，因为text-align属性是应用于块级元素的。
+
+css
+div {
+  text-align: center;
+}
+将h1置于这个div中，标题文本就会水平居中。
+
+html
+<div>
+  <h1>这是一个居中的标题</h1>
+</div>
+块级元素水平居中（如果h1是块级元素且宽度固定）
+如果h1标题是一个块级元素，并且你希望它在容器中水平居中，你可以使用margin的自动值来实现。
+
+css
+h1 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%; /* 或其他具体的宽度值 *
+}
+Flexbox布局居中
+使用Flexbox布局可以非常方便地实现元素的居中。只需将父元素设置为Flex容器，并使用justify-content和align-items属性。
+
+css
+.container {
+  display: flex;
+  justify-content: center; /* 水平居中 *
+  align-items: center; /* 垂直居中，如果需要的话 *
+  height: 100vh; /* 如果需要整个视口高度 *
+}
+然后，将h1置于这个Flex容器中。
+
+html
+<div class="container">
+  <h1>这是一个居中的标题</h1>
+</div>
+Grid布局居中
+类似地，你也可以使用Grid布局来居中h1标题。
+
+css
+.container {
+  display: grid;
+  place-items: center; /* 同时实现水平和垂直居中
+  height: 100vh; /* 如果需要整个视口高度
+}
+HTML结构同上。
+
+垂直居中（如果需要）
+如果你还需要垂直居中h1标题，那么上面的Flexbox和Grid方法都可以实现。如果你只是使用文本对齐，并且h1的高度不是由内容撑开的（比如单行文本），那么你可能需要额外的技巧来垂直居中。不过，在大多数情况下，使用Flexbox或Grid布局是最简单且最有效的方法。
+*/
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(.99);
+    }
+}
+
+@keyframes darkenColor {
+    0% {
+        background-color: #bbb;
+    }
+    100% {
+        background-color: #727272;
+    }
+}
+
+@keyframes addshadow {
+    0% {
+        box-shadow: 0 0 0 0;
+    }
+    100% {
+        box-shadow: 2px 2px 5px 0 rgb(253, 253, 253);
+    }
+}
+
+@keyframes prominent {
+    0% {
+        background-color: #ccc;
+    }
+    100% {
+        background-color: #0c0c0d;
+    }
+}
+
+@keyframes shadow {
+    0% {
+        box-shadow: 0 0 0 0;
+    }
+    100% {
+        box-shadow: 2px 2px 10px 5px #0c0c0d;
+    }
+}
+
+@keyframes fontColor {
+    0% {
+        color: #0c0c0d;
+    }
+    100% {
+        color: #ccc;
+    }
+}
+
+body {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    background-color: #58c6ff;
+    width: 100%;
+}
+
+#siftIco {
+    width: 4%;
+    height: auto;
+    z-index: 1;
+}
+
+.imgcontainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.imgcontainer {
+    margin-left: 5px;
+}
+
+#siftblock {
+    position: fixed; /* 固定定位，使其始终在页面上 */
+    right: -350px; /* 初始位置在屏幕右侧外部 */
+    top: 50%; /* 垂直居中 */
+    transform: translateY(-50%); /* 垂直居中调整 */
+    width: 300px; /* 弹出框宽度 */
+    height: 100%; /* 弹出框高度 */
+    background-color: #f8f9fa; /* 背景色 */
+    padding: 20px; /* 内边距 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    transition: right .5s ease-in-out; /* 平滑过渡效果 */
+    pointer-events: none;
+}
+
+#siftblock.show {
+    right: 0; /* 显示时的位置 */
+    pointer-events: auto;
+}
+
+#siftIco {
+    cursor: pointer; /* 鼠标悬停时变为手型 */
+}
+
+#siftfrom {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    margin: 10px;
+}
+
+h1 {
+    text-align: center;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*width: 50%;*/
+    margin-top: 0;
+    background-image: linear-gradient(to right, #595959, #444444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.qsdiv {
+    border-radius: 5px;
+    background-color: #e7e7e7;
+    height: 100vh;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.queblock {
+    /*border: 2px solid #0c0c0d;*/
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #bbb;
+    margin: 0 5px 10px 5px;
+    transition: all .3s ease;
+    border: 2px solid rgba(103, 103, 103, 0.9);
+    color: #0c0c0d;
+}
+
+.queblock:hover {
+    animation: scaleUp .3s forwards, darkenColor .3s forwards, addshadow .3s forwards;
+}
+
+.quekey {
+    margin-left: 5%;
+}
+
+.quetext {
+    /*text-align: center;*/
+    margin-left: 10%;
+}
+
+.begbutton {
+    position: fixed;
+    bottom: 5%;
+    margin: 10px;
+    right: 30%;
+    left: 30%;
+    text-align: center;
+    font-size: 24px;
+    border-radius: 5px;
+    color: #0c0c0d;
+}
+
+.begbutton:hover {
+    animation: prominent .4s forwards, shadow 1s forwards, fontColor 1s forwards;
+}
