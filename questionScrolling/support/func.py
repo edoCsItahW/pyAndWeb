@@ -201,7 +201,6 @@ if __name__ == "__main__":
     # sql.update(None, "where id = 3", other="other1")
     # sql.selectColumn(None, ("*", ), condition="where type = 'sChoice' or type = 'multChoice'")
 
-    ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\导论.txt", r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesData.csv",
-                        sChoice="$", multChoice="&", anQuestion=(("#", "%"), True), simQuestion=(("^", "*"), True), disQuestion=(("@", "~"), True))
+    ins = contentParser(r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\导论.txt", r"D:\xst_project_202212\codeSet\pyAndWeb\project\questionScrolling\static\data\quesData.csv", sChoice="$", multChoice="&", anQuestion=(("#", "%"), True), simQuestion=(("^", "*"), True), disQuestion=(("@", "~"), True))
     ins.parsing()
 

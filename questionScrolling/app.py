@@ -13,7 +13,7 @@
 # 编码模式: utf-8
 # 注释: 
 # -------------------------<Lenovo>----------------------------
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template
 from api.api import api_blue
 from api.examApi import examApi_blue
 
