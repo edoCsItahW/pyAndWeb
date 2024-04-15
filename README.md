@@ -2,17 +2,26 @@
 * 包含了后端以flask为框架,前端以Vue为框架的一些小项目
    * 文件构成
 
-
+   ```
     \api - flask蓝图
+    
     \static - 静态文件
+    
     	\css - css样式文件
+    	
     	\js - javascript文件
+    	
     	\fonts - 字体文件
+    	
     	\imgs - 图片文件
+    	
     \support - 额外的函数定义
+    
     \template - flask模板
+    
     \vueDev - vue开发根目录
-
+   ```
+   
 ## codeEditor
 * 模拟在线python编辑器
 
