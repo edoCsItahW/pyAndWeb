@@ -16,7 +16,6 @@
 from flask import Flask, request, redirect, url_for, render_template, flash
 from warnings import warn
 from traceback import format_exc
-from .other.getvideo import video
 
 app = Flask(__name__, static_url_path="", static_folder=r"D:\xst_project_202212\Python\privateProject\flask_and_html\static", template_folder=r"D:\xst_project_202212\Python\privateProject\flask_and_html\template")
 app.secret_key = "secret_key"

@@ -82,10 +82,6 @@ export default {
     display: none;
     background-color: #1f2024;
     z-index: 1;
-}
-
-.task-init-ui {
-    display: flex;
     flex-direction: column;
 }
 

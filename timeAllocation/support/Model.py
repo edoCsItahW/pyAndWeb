@@ -16,8 +16,14 @@
 from typing import Literal, final, overload
 from datetime import time, datetime, timedelta
 from functools import cached_property
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 from warnings import warn
+from deprecated import deprecated
+from atexit import register
+
+
+@register
+def end(): print("程序结束")
 
 
 class duration:
@@ -48,7 +54,7 @@ weekTotalSecond = duration(seconds=timedelta(weeks=1).total_seconds())
 
 
 class task(ABC):
-    def __init__(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"] | datetime, start: time = None, end: time = None, *, weight: float = None):
+    def __init__(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"] | datetime = None, start: time = None, end: time = None, *, weight: float = None):
         self._name = name
         self._start = start
         self._end = end
@@ -92,7 +98,15 @@ class task(ABC):
     @final
     @property
     def day(self):
-        return self._day
+        if hasattr(self, "_day"):
+            return self._day
+
+        warn(
+            f"在引用该私有属性前,请先设置星期!")
+
+    @day.setter
+    def day(self, value: str):
+        self._day = value
 
     @final
     @property
@@ -114,9 +128,8 @@ class task(ABC):
 
 
 class varTask(task):
-    def __init__(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"] | datetime, *,
-                 weight: float = None):
-        super().__init__(name, day, weight=weight)
+    def __init__(self, name: str, *, weight: float = None):
+        super().__init__(name, weight=weight)
 
 
 class constTask(task):
@@ -153,17 +166,25 @@ class allocation:
     @allocateList.setter
     def allocateList(self, value): self._allocateList = value
 
-    def addTask(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"], start: time = None, end: time = None, *, weight: float = None):
-        if start and end:
+    def addTask(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"] = None, start: time = None, end: time = None, *, weight: float = None):
+        if day and start and end:
             self.dayTable[day].append(constTask(name, day, start, end, weight=weight))
         else:
-            self.allocateList.append(varTask(name, day, weight=weight))
+            self.allocateList.append(varTask(name, weight=weight))
+
+    def getFreeTask(self, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"]):
+        return [i for i in self.dayTable[day] if i.name == f"{i}FT"][0]
 
     def allocate(self):
-        pass
+        for t in self.allocateList:
+            t: varTask
+            for k, dlist in self.dayTable.items():
+                if t.duration.seconds >= self.getFreeTask(k).duration.seconds:
+                    pass
+                # TODO: 实现分配算法
 
 
 if __name__ == '__main__':
     a = allocation()
-    a.addTask("task1", "Mon", weight=1.0)
+    a.addTask("task1", weight=1.0)
     print(a.dayTable)
