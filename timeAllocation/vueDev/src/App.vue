@@ -3,9 +3,15 @@ const date = new Date();
 const weekList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', "Sun"];
 
 let taskInitUI = null;
+let start = null;
+let end = null;
+let taskName = null;
 
 onload = () => {
     taskInitUI = document.getElementById("task-init-ui");
+    start = document.getElementById("start-time")
+    end = document.getElementById("end-time")
+    taskName = document.getElementById("task-name")
 }
 
 export default {
@@ -13,41 +19,55 @@ export default {
         return {
             weekKey: weekList,
             dayTable: weekList.reduce((obj, key) => {obj[key] = []; return obj}, {}),
+            showTimeDiv: true,
+            showTaskInitUI: false,
         }
     },
     methods: {
         addTask(event) {
             const week = event.target.getAttribute('week')
-            console.log(taskInitUI)
 
-            if (taskInitUI) taskInitUI.style.display = 'block';
+            if (taskInitUI) {
+                this.showTaskInitUI = true;
+                taskName.value = "";
+            }
 
         },
         getTodayWeek() {
             return weekList[date.getDay()]
-        }
+        },
     }
 }
 </script>
 
 <template>
-    <div class="task-init-ui" id="task-init-ui">
+    <div class="task-init-ui" id="task-init-ui" v-show="showTaskInitUI">
+        <svg class="close-icon" @click="showTaskInitUI = false" viewBox="0 0 20 20" width="24" height="24">
+            <rect x="2" y="2" width="16" height="16" stroke="white" rx="2" ry="2" fill="#ccc"/>
+            <line x1="4" y1="4" x2="16" y2="16" stroke="red" stroke-width="2" />
+            <line x1="16" y1="4" x2="4" y2="16" stroke="red" stroke-width="2" />
+        </svg>
         <div class="label-div">
             <label class="label-name" for="task-name">任务名:</label>
             <input class="task-input" type="text" id="task-name" placeholder="任务名">
         </div>
         <div class="label-div">
+            <label class="label-name" for="constant">固定时段:</label>
+            <input class="task-input" type="checkbox" id="constant" v-model="showTimeDiv">
+        </div>
+        <div class="label-div" v-if="showTimeDiv">
             <label class="label-name" for="start-time">开始时间:</label>
             <input class="task-input" type="time" id="start-time">
         </div>
-        <div class="label-div">
+        <div class="label-div" v-if="showTimeDiv">
             <label class="label-name" for="end-time">结束时间:</label>
             <input class="task-input" type="time" id="end-time">
         </div>
-        <div class="label-div">
-            <label class="label-name" for="constant">固定时段:</label>
-            <input class="task-input" type="checkbox" id="constant">
+        <div class="label-div" v-if="!showTimeDiv">
+            <label class="label-name" for="task-weight">任务权重:</label>
+            <input class="task-input" type="number" id="task-weight" value="1.0" min="0" max="1.0">
         </div>
+
     </div>
     <div class="toolbar">
         <div class="label-container">
@@ -71,6 +91,10 @@ export default {
 </template>
 
 <style>
+.close-icon {
+    float: right;
+}
+
 .task-init-ui {
     position: absolute;
     top: 50%; /* 从顶部开始，偏移50%的父元素高度 */
@@ -79,7 +103,6 @@ export default {
     width: 50%;
     height: 50%;
     border-radius: 5px;
-    display: none;
     background-color: #1f2024;
     z-index: 1;
     flex-direction: column;

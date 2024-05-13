@@ -133,8 +133,8 @@ class varTask(task):
 
 
 class constTask(task):
-    def __init__(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"] | datetime, start: time = None, end: time = None, *, weight: float = None):
-        super().__init__(name, day, start, end, weight=weight)
+    def __init__(self, name: str, day: Literal["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"] | datetime, start: time = None, end: time = None):
+        super().__init__(name, day, start, end)
 
 
 class allocation:
