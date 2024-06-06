@@ -43,9 +43,11 @@ export default {
         },
         addFixedTask(status) {
             // TODO: 实现固定任务的添加,同占位div和min-height的调整
+
         },
         addVarTask(status) {
             this.allocTasks.push(status);
+
             if (taskContainter.getBoundingClientRect().width > 0.75 *  bottonContainer.getBoundingClientRect().width) {
                 taskContainter.style.minWidth = taskContainter.getBoundingClientRect().width + "px";
                 taskContainter.style.overflowX = "auto";
