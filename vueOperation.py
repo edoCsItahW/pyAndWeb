@@ -411,7 +411,7 @@ def a():
 
 
 if __name__ == '__main__':
-    ins = vue(r"E:\codeSpace\codeSet\pyAndWeb\project\timeAllocation\vueDev")
+    ins = vue(r"E:\codeSpace\codeSet\Python\privateProject\exam\newVueDev")
     # ins.beginInit()
     ins.beginMock()
     # MessageBox(0, "Hello PYwin32", "MessageBox", MB_OK | MB_ICONWARNING)
