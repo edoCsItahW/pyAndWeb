@@ -1,0 +1,38 @@
+[
+    {
+        "name": {
+            "en": "Exam Platform V1",
+            "zh": "考试平台V1"
+        },
+        "desc": {
+            "en": "A platform for exams management",
+            "zh": "考试管理平台"
+        },
+        "url": "https://github.com/edoCsItahW/ExamPlatform",
+        "docUrl": "https://github.com/edoCsItahW/ExamPlatform/wiki",
+        "demoUrl": "https://exam-platform-v1.herokuapp.com/",
+        "intro": "# Exam Platform\n\nThis is a platform for exams management."
+    },
+    {
+        "name": {
+            "en": "Project 1",
+            "zh": "项目1"
+        },
+        "desc": {
+            "en": "A project for testing",
+            "zh": "测试项目"
+        },
+        "url": "https://github.com/edoCsItahW/Project1"
+    },
+    {
+        "name": {
+            "en": "Project 2",
+            "zh": "项目2"
+        },
+        "desc": {
+            "en": "A project for testing",
+            "zh": "测试项目"
+        },
+        "url": "https://github.com/edoCsItahW/Project2"
+    }
+]

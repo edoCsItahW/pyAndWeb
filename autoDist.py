@@ -148,9 +148,10 @@ class autoDist:
                     if path.exists(info['modifyPath']):
                         with open(info['modifyPath'], 'r+', encoding='utf-8') as f:
                             content = f.read()
-
-                            content = sub(pattren := rf"(?<=url\()(/assets/)({file})(?=\))",
-                                          rep := fr'../{info["subDirName"]}/\2', content)
+                            if findall(pattren := rf"(?<=url\()(/assets/)({file})(?=\))", content):
+                                content = sub(pattren, fr'../{info["subDirName"]}/\2', content)
+                            elif findall(pattren := rf"(?<=Zx=\")(/assets/)({file})(?=\")", content):
+                                content = sub(pattren, fr'../static/{info["subDirName"]}/\2', content)
 
                             f.seek(0)
                             f.write(content)
@@ -174,6 +175,11 @@ class autoDist:
                            'suffix':     'woff2',
                            'subDirName': 'font',
                            'modifyPath': path.join(self.staticPath, 'css', path.basename(self.cssPath))
+                       },
+                       {
+                           'suffix': 'png',
+                           'subDirName': 'img',
+                           'modifyPath': path.join(self.staticPath, 'js', path.basename(self.jsPath))
                        }
                    )
 
@@ -183,4 +189,6 @@ class autoDist:
 
 
 if __name__ == '__main__':
-    autoDist(r"E:\codeSpace\codeSet\web\project\examPlatform\dist", r"E:\codeSpace\codeSet\pyAndWeb\project\examPlatform").move()
+    # autoDist(r"E:\codeSpace\codeSet\web\project\examPlatform\dist", r"E:\codeSpace\codeSet\pyAndWeb\project\examPlatform").move()
+    autoDist(r"E:\codeSpace\codeSet\web\project\tinyWeb\dist", r"E:\codeSpace\codeSet\pyAndWeb\project\tinyWeb").move()
+    # autoDist(r"E:\codeSpace\codeSet\web\project\server\dist", r"E:\codeSpace\codeSet\pyAndWeb\project\server").move()
